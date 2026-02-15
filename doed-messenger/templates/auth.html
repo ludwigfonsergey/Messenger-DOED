@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Doed Messenger - Вход</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        :root {
+            --red: #e63946;
+            --dark-red: #d00000;
+            --blue: #4a6fa5;
+            --purple: #8a2be2;
+            --green: #32CD32;
+            --dark: #1a1a2e;
+            --light: #16213e;
+            --text: #f1faee;
+            --gray: #a8dadc;
+            --msg-bg: #0f3460;
+            --border: #2d3047;
+            --yellow: #ffd700;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), var(--light));
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Анимированный фон */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--red) 0%, transparent 10%);
+            opacity: 0.05;
+            animation: pulse 20s infinite linear;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-10%, -10%) rotate(0deg); }
+            100% { transform: translate(10%, 10%) rotate(360deg); }
+        }
+        
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .auth-card {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 30px;
+            border: 3px solid var(--red);
+            box-shadow: 0 10px 40px rgba(230, 57, 70, 0.2),
+                        0 0 20px rgba(230, 57, 70, 0.1);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        /* 3D Кубик */
+        .cube-container {
+            width: 60px;
+            height: 60px;
+            perspective: 1000px;
+        }
+        
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-15deg) rotateY(-15deg);
+            animation: rotate 10s infinite linear;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotateX(-15deg) rotateY(-15deg); }
+            100% { transform: rotateX(-15deg) rotateY(345deg); }
+        }
+        
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--blue);
+            border: 2px solid var(--red);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.9;
+        }
+        
+        .face-front { transform: translateZ(30px); }
+        .face-back { transform: rotateY(180deg) translateZ(30px); background: var(--blue); }
+        .face-right { transform: rotateY(90deg) translateZ(30px); background: var(--blue); }
+        .face-left { transform: rotateY(-90deg) translateZ(30px); background: var(--blue); }
+        .face-top { transform: rotateX(90deg) translateZ(30px); background: var(--blue); }
+        .face-bottom { transform: rotateX(-90deg) translateZ(30px); background: var(--blue); }
+        
+        .cube-eye {
+            width: 12px;
+            height: 12px;
+            background: white;
+            position: absolute;
+            border-radius: 50%;
+        }
+        
+        .eye-left { top: 15px; left: 12px; }
+        .eye-right { top: 15px; right: 12px; }
+        
+        .cube-mouth {
+            width: 24px;
+            height: 8px;
+            background: white;
+            position: absolute;
+            bottom: 12px;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .auth-logo-text {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--blue);
+            text-shadow: 0 0 10px rgba(74, 111, 165, 0.5);
+        }
+        
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: var(--dark);
+            padding: 5px;
+            border-radius: 15px;
+            border: 2px solid var(--border);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            color: var(--text);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .auth-tab.active {
+            background: var(--red);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--dark);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 15px rgba(230, 57, 70, 0.3);
+        }
+        
+        .form-input::placeholder {
+            color: var(--gray);
+            opacity: 0.5;
+        }
+        
+        .auth-button {
+            width: 100%;
+            padding: 16px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .auth-button:hover {
+            background: var(--dark-red);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.5);
+        }
+        
+        .auth-button:hover::before {
+            left: 100%;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .auth-footer a {
+            color: var(--red);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .auth-footer a:hover {
+            color: var(--yellow);
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            background: rgba(230, 57, 70, 0.2);
+            border: 2px solid var(--red);
+            color: var(--text);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            animation: shake 0.3s ease-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .success-message {
+            background: rgba(50, 205, 50, 0.2);
+            border: 2px solid var(--green);
+            color: var(--text);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--red);
+            transition: width 0.3s;
+        }
+        
+        .strength-text {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .auth-container { padding: 10px; }
+            .auth-card { padding: 20px; }
+            .auth-logo-text { font-size: 36px; }
+            
+            .cube-container {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .face-front { transform: translateZ(25px); }
+            .face-back { transform: rotateY(180deg) translateZ(25px); }
+            .face-right { transform: rotateY(90deg) translateZ(25px); }
+            .face-left { transform: rotateY(-90deg) translateZ(25px); }
+            .face-top { transform: rotateX(90deg) translateZ(25px); }
+            .face-bottom { transform: rotateX(-90deg) translateZ(25px); }
+            
+            .cube-eye {
+                width: 8px;
+                height: 8px;
+            }
+            .eye-left { top: 12px; left: 10px; }
+            .eye-right { top: 12px; right: 10px; }
+            .cube-mouth {
+                width: 18px;
+                height: 6px;
+                bottom: 8px;
+            }
+            
+            .auth-tab {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .form-input {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+            .auth-button {
+                padding: 14px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <div class="cube-container">
+                        <div class="cube">
+                            <div class="cube-face face-front">
+                                <div class="cube-eye eye-left"></div>
+                                <div class="cube-eye eye-right"></div>
+                                <div class="cube-mouth"></div>
+                            </div>
+                            <div class="cube-face face-back"></div>
+                            <div class="cube-face face-right"></div>
+                            <div class="cube-face face-left"></div>
+                            <div class="cube-face face-top"></div>
+                            <div class="cube-face face-bottom"></div>
+                        </div>
+                    </div>
+                    <div class="auth-logo-text">DOED</div>
+                </div>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">Вход</button>
+                <button class="auth-tab" onclick="switchTab('register')">Регистрация</button>
+            </div>
+            
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+            
+            <form id="loginForm" class="auth-form active" method="post" action="/login">
+                <div class="form-group">
+                    <label class="form-label">Имя пользователя или тег</label>
+                    <input type="text" name="username" class="form-input" placeholder="username или @tag" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="auth-button">Войти в DOED</button>
+            </form>
+            
+            <form id="registerForm" class="auth-form" method="post" action="/register">
+                <div class="form-group">
+                    <label class="form-label">Имя пользователя</label>
+                    <input type="text" name="username" class="form-input" placeholder="Например: DoedUser" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Тег (@username)</label>
+                    <input type="text" name="tag" class="form-input" id="tagInput" placeholder="например: doed_user" required autocomplete="off">
+                    <div style="font-size: 12px; color: var(--gray); margin-top: 5px;">Только латинские буквы, цифры и _</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-input" placeholder="user@example.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-input" id="regPassword" placeholder="Хоть 1 символ" required autocomplete="new-password">
+                    <div class="password-strength">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div class="strength-text" id="strengthText">Сложность: любая</div>
+                </div>
+                <button type="submit" class="auth-button">Создать аккаунт</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>🔴 Нажимая кнопку, вы соглашаетесь с тем что вы тупой лох</p>
+                <p style="margin-top: 10px; font-size: 12px;">© 2026 Doed Messenger</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        /**
+         * ============================================
+         * JavaScript для страницы авторизации
+         * ============================================
+         */
+
+        /**
+         * Переключение между вкладками
+         */
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+            
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        /**
+         * Валидация тега
+         */
+        function validateTag(tag) {
+            const tagRegex = /^[a-zA-Z0-9_]+$/;
+            return tagRegex.test(tag);
+        }
+
+        /**
+         * Проверка сложности пароля (просто для красоты)
+         */
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 1) strength += 25;
+            if (password.length >= 4) strength += 25;
+            if (/[A-Z]/.test(password)) strength += 25;
+            if (/[0-9]/.test(password)) strength += 25;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+            return Math.min(strength, 100);
+        }
+
+        /**
+         * Показать ошибку
+         */
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        /**
+         * Показать успех
+         */
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // ============================================
+        // Обработчики событий
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Обработка формы регистрации - проверяем только тег
+            const registerForm = document.getElementById('registerForm');
+            registerForm.addEventListener('submit', function(e) {
+                const tag = document.querySelector('input[name="tag"]').value.trim();
+                
+                // Проверяем только тег
+                if (!validateTag(tag)) {
+                    e.preventDefault();
+                    showError('Тег может содержать только латинские буквы, цифры и нижнее подчеркивание! 🤡');
+                    return;
+                }
+                
+                // Пароль может быть любым, даже пустым (но форма требует required)
+            });
+
+            // Индикатор сложности пароля (чисто для понтов)
+            const passwordInput = document.getElementById('regPassword');
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function(e) {
+                    const password = e.target.value;
+                    const strength = checkPasswordStrength(password);
+                    
+                    strengthBar.style.width = strength + '%';
+                    
+                    if (strength < 25) {
+                        strengthBar.style.background = 'var(--red)';
+                        strengthText.textContent = 'Сложность: так себе (но нам похуй)';
+                        strengthText.style.color = 'var(--red)';
+                    } else if (strength < 50) {
+                        strengthBar.style.background = '#ff6b6b';
+                        strengthText.textContent = 'Сложность: слабый';
+                        strengthText.style.color = '#ff6b6b';
+                    } else if (strength < 75) {
+                        strengthBar.style.background = '#ffd93d';
+                        strengthText.textContent = 'Сложность: средний';
+                        strengthText.style.color = '#ffd93d';
+                    } else {
+                        strengthBar.style.background = '#6bff6b';
+                        strengthText.textContent = 'Сложность: сильный (молодец)';
+                        strengthText.style.color = '#6bff6b';
+                    }
+                });
+            }
+
+            // Очистка тега от спецсимволов
+            const tagInput = document.getElementById('tagInput');
+            if (tagInput) {
+                tagInput.addEventListener('input', function(e) {
+                    let value = e.target.value;
+                    value = value.replace(/[^a-zA-Z0-9_]/g, '');
+                    e.target.value = value;
+                });
+            }
+
+            // Параметры URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('error') === 'invalid') {
+                showError('Неверное имя пользователя или пароль, лох');
+            } else if (urlParams.get('error') === 'exists') {
+                showError('Пользователь уже существует, придумай другой ник или тег');
+            } else if (urlParams.get('error') === 'tag_invalid') {
+                showError('Тег может содержать только латинские буквы, цифры и _');
+            } else if (urlParams.get('success') === 'registered') {
+                showSuccess('Регистрация успешна! Теперь войди, лох');
+            }
+        });
+    </script>
+</body>
+</html>
