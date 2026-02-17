@@ -6,3 +6,4 @@ python-jose[cryptography]==3.3.0
 sqlalchemy==1.4.52
 python-dotenv==1.0.0
 argon2-cffi==23.1.0
+gunicorn
