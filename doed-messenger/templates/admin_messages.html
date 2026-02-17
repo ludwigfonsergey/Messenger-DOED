@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doed Admin - Сообщения</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+        :root{
+            --red:#e63946;--dark-red:#d00000;--blue:#4a6fa5;--dark:#1a1a2e;
+            --light:#16213e;--text:#f1faee;--gray:#a8dadc;--border:#2d3047;
+        }
+        body{background:var(--dark);color:var(--text);}
+        .header{background:var(--light);padding:20px;border-bottom:3px solid var(--red);}
+        .container{display:flex;min-height:100vh;}
+        .sidebar{width:250px;background:var(--light);padding:20px;border-right:2px solid var(--border);}
+        .sidebar a{display:block;color:var(--text);text-decoration:none;padding:10px;margin:5px 0;border-radius:5px;}
+        .sidebar a:hover{background:var(--red);}
+        .content{flex:1;padding:20px;}
+        .filter-form{margin-bottom:20px;display:flex;gap:10px;}
+        .filter-select{padding:10px;background:var(--light);border:2px solid var(--border);color:var(--text);border-radius:5px;}
+        .table{width:100%;border-collapse:collapse;background:var(--light);border-radius:10px;overflow:hidden;}
+        .table th,.table td{padding:12px;text-align:left;border-bottom:1px solid var(--border);}
+        .table th{background:var(--red);}
+        .message-preview{max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .btn{display:inline-block;padding:8px 16px;border-radius:5px;text-decoration:none;margin:2px;border:none;cursor:pointer;}
+        .btn-primary{background:var(--red);color:white;}
+        .btn-primary:hover{background:var(--dark-red);}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔴 Doed Admin Panel - Сообщения</h1>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <a href="/admin/">🏠 Главная</a>
+            <a href="/admin/users">👥 Пользователи</a>
+            <a href="/admin/messages">💬 Сообщения</a>
+            <a href="/admin/reports">⚠️ Жалобы</a>
+            <a href="/chat">↩️ Вернуться в чат</a>
+            <a href="/logout">🚪 Выйти</a>
+        </div>
+        <div class="content">
+            <h2>Все сообщения</h2>
+            
+            <form class="filter-form" method="get">
+                <select name="user_id" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Все пользователи</option>
+                    {% for user in users %}
+                    <option value="{{ user.id }}" {% if selected_user == user.id %}selected{% endif %}>
+                        {{ user.username }} (@{{ user.tag }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Отправитель</th>
+                        <th>Получатель</th>
+                        <th>Сообщение</th>
+                        <th>Время</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for msg in messages %}
+                    <tr>
+                        <td>{{ msg.id }}</td>
+                        <td>
+                            {% set sender = user_dict.get(msg.sender_id) %}
+                            {% if sender %}
+                                {{ sender.username }} (@{{ sender.tag }})
+                            {% else %}
+                                [Удален]
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% set receiver = user_dict.get(msg.receiver_id) %}
+                            {% if receiver %}
+                                {{ receiver.username }} (@{{ receiver.tag }})
+                            {% else %}
+                                [Удален]
+                            {% endif %}
+                        </td>
+                        <td class="message-preview" title="{{ msg.content }}">
+                            {% if msg.is_file %}
+                                📁 {{ msg.file_name }}
+                            {% else %}
+                                {{ msg.content }}
+                            {% endif %}
+                        </td>
+                        <td>{{ msg.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{% if msg.is_read %}✅{% else %}❌{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

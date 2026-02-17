@@ -38,7 +38,6 @@
             position: relative;
         }
         
-        /* Анимированный фон */
         body::before {
             content: '';
             position: absolute;
@@ -97,7 +96,6 @@
             margin-bottom: 10px;
         }
         
-        /* 3D Кубик */
         .cube-container {
             width: 60px;
             height: 60px;
@@ -287,16 +285,10 @@
             font-size: 14px;
         }
         
-        .auth-footer a {
-            color: var(--red);
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-        
-        .auth-footer a:hover {
-            color: var(--yellow);
+        .auth-footer p {
+            cursor: pointer;
             text-decoration: underline;
+            text-decoration-color: var(--red);
         }
         
         .error-message {
@@ -326,27 +318,6 @@
             margin-bottom: 20px;
             text-align: center;
             display: none;
-        }
-        
-        .password-strength {
-            margin-top: 8px;
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .strength-bar {
-            height: 100%;
-            width: 0%;
-            background: var(--red);
-            transition: width 0.3s;
-        }
-        
-        .strength-text {
-            font-size: 12px;
-            color: var(--gray);
-            margin-top: 5px;
         }
         
         /* Мобильная адаптация */
@@ -395,6 +366,35 @@
     </style>
 </head>
 <body>
+    <!-- Модальное окно пользовательского соглашения -->
+    <div class="terms-modal" id="termsModal">
+        <div class="terms-modal-content">
+            <div class="terms-modal-header">📜 Пользовательское соглашение</div>
+            <div class="terms-modal-body">
+                <h3>Правила использования Doed Messenger:</h3>
+                <ol>
+                    <li>Ты долбаёб, если читаешь это</li>
+                    <li>Твой IQ ниже комнатной температуры</li>
+                    <li>Администратор имеет право банить тебя просто потому что</li>
+                    <li>Все твои сообщения мы продаём спецслужбам (шутка, но мало ли)</li>
+                    <li>Если ты пожаловался на сообщение, админ посмотрит и поржёт</li>
+                    <li>Ты соглашаешься с тем что ты лох</li>
+                    <li>Администратор всегда прав</li>
+                    <li>Если админ не прав, смотри пункт 7</li>
+                    <li>Никаких гарантий что твой собеседник не бот</li>
+                    <li>Отправляя файлы, ты соглашаешься что они могут быть украдены</li>
+                    <li>Твой пароль может быть "1" - нам похуй</li>
+                    <li>Регистрируясь, ты даёшь нам право смеяться над тобой</li>
+                </ol>
+                <p style="color: var(--red); font-weight: bold; margin-top: 20px;">Ты точно хочешь продолжить, дебил?</p>
+            </div>
+            <div class="terms-modal-footer">
+                <button class="terms-button cancel" onclick="closeTerms()">Я передумал, я не готов</button>
+                <button class="terms-button accept" onclick="acceptTerms()">Я лох, согласен</button>
+            </div>
+        </div>
+    </div>
+
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
@@ -454,31 +454,129 @@
                 <div class="form-group">
                     <label class="form-label">Пароль</label>
                     <input type="password" name="password" class="form-input" id="regPassword" placeholder="Хоть 1 символ" required autocomplete="new-password">
-                    <div class="password-strength">
-                        <div class="strength-bar" id="strengthBar"></div>
-                    </div>
-                    <div class="strength-text" id="strengthText">Сложность: любая</div>
                 </div>
                 <button type="submit" class="auth-button">Создать аккаунт</button>
             </form>
             
             <div class="auth-footer">
-                <p>🔴 Нажимая кнопку, вы соглашаетесь с тем что вы тупой лох</p>
+                <p onclick="showTerms()">🔴 Нажимая кнопку, вы соглашаетесь с пользовательским соглашением</p>
                 <p style="margin-top: 10px; font-size: 12px;">© 2026 Doed Messenger</p>
             </div>
         </div>
     </div>
-    
-    <script>
-        /**
-         * ============================================
-         * JavaScript для страницы авторизации
-         * ============================================
-         */
 
-        /**
-         * Переключение между вкладками
-         */
+    <style>
+        /* Стили для модального окна соглашения */
+        .terms-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        .terms-modal-content {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border: 3px solid var(--red);
+            box-shadow: 0 10px 40px rgba(230,57,70,0.3);
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .terms-modal-header {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--red);
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+        
+        .terms-modal-body {
+            color: var(--text);
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .terms-modal-body ol {
+            padding-left: 20px;
+        }
+        
+        .terms-modal-body li {
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        .terms-modal-footer {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+        
+        .terms-button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .terms-button.accept {
+            background: var(--red);
+            color: white;
+        }
+        
+        .terms-button.accept:hover {
+            background: var(--dark-red);
+            transform: translateY(-2px);
+        }
+        
+        .terms-button.cancel {
+            background: var(--border);
+            color: var(--text);
+        }
+        
+        .terms-button.cancel:hover {
+            background: var(--gray);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .terms-modal-content {
+                padding: 20px;
+                width: 95%;
+            }
+            .terms-modal-header {
+                font-size: 20px;
+            }
+            .terms-modal-body {
+                max-height: 300px;
+            }
+        }
+    </style>
+
+    <script>
         function switchTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
@@ -495,30 +593,11 @@
             document.getElementById('successMessage').style.display = 'none';
         }
 
-        /**
-         * Валидация тега
-         */
         function validateTag(tag) {
             const tagRegex = /^[a-zA-Z0-9_]+$/;
             return tagRegex.test(tag);
         }
 
-        /**
-         * Проверка сложности пароля (просто для красоты)
-         */
-        function checkPasswordStrength(password) {
-            let strength = 0;
-            if (password.length >= 1) strength += 25;
-            if (password.length >= 4) strength += 25;
-            if (/[A-Z]/.test(password)) strength += 25;
-            if (/[0-9]/.test(password)) strength += 25;
-            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
-            return Math.min(strength, 100);
-        }
-
-        /**
-         * Показать ошибку
-         */
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             errorDiv.textContent = message;
@@ -528,9 +607,6 @@
             }, 3000);
         }
 
-        /**
-         * Показать успех
-         */
         function showSuccess(message) {
             const successDiv = document.getElementById('successMessage');
             successDiv.textContent = message;
@@ -540,59 +616,51 @@
             }, 3000);
         }
 
-        // ============================================
-        // Обработчики событий
-        // ============================================
+        // ===== ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ =====
+        let termsAccepted = localStorage.getItem('doed_terms') === 'true';
+
+        function showTerms() {
+            document.getElementById('termsModal').style.display = 'flex';
+        }
+
+        function closeTerms() {
+            document.getElementById('termsModal').style.display = 'none';
+        }
+
+        function acceptTerms() {
+            termsAccepted = true;
+            localStorage.setItem('doed_terms', 'true');
+            closeTerms();
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             
-            // Обработка формы регистрации - проверяем только тег
             const registerForm = document.getElementById('registerForm');
             registerForm.addEventListener('submit', function(e) {
+                if (!termsAccepted) {
+                    e.preventDefault();
+                    showTerms();
+                    return;
+                }
+                
                 const tag = document.querySelector('input[name="tag"]').value.trim();
                 
-                // Проверяем только тег
                 if (!validateTag(tag)) {
                     e.preventDefault();
                     showError('Тег может содержать только латинские буквы, цифры и нижнее подчеркивание! 🤡');
                     return;
                 }
-                
-                // Пароль может быть любым, даже пустым (но форма требует required)
             });
 
-            // Индикатор сложности пароля (чисто для понтов)
-            const passwordInput = document.getElementById('regPassword');
-            const strengthBar = document.getElementById('strengthBar');
-            const strengthText = document.getElementById('strengthText');
-            
-            if (passwordInput) {
-                passwordInput.addEventListener('input', function(e) {
-                    const password = e.target.value;
-                    const strength = checkPasswordStrength(password);
-                    
-                    strengthBar.style.width = strength + '%';
-                    
-                    if (strength < 25) {
-                        strengthBar.style.background = 'var(--red)';
-                        strengthText.textContent = 'Сложность: так себе (но нам похуй)';
-                        strengthText.style.color = 'var(--red)';
-                    } else if (strength < 50) {
-                        strengthBar.style.background = '#ff6b6b';
-                        strengthText.textContent = 'Сложность: слабый';
-                        strengthText.style.color = '#ff6b6b';
-                    } else if (strength < 75) {
-                        strengthBar.style.background = '#ffd93d';
-                        strengthText.textContent = 'Сложность: средний';
-                        strengthText.style.color = '#ffd93d';
-                    } else {
-                        strengthBar.style.background = '#6bff6b';
-                        strengthText.textContent = 'Сложность: сильный (молодец)';
-                        strengthText.style.color = '#6bff6b';
-                    }
-                });
-            }
+            const loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', function(e) {
+                if (!termsAccepted) {
+                    e.preventDefault();
+                    showTerms();
+                    return;
+                }
+            });
 
-            // Очистка тега от спецсимволов
             const tagInput = document.getElementById('tagInput');
             if (tagInput) {
                 tagInput.addEventListener('input', function(e) {
@@ -602,7 +670,6 @@
                 });
             }
 
-            // Параметры URL
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('error') === 'invalid') {
                 showError('Неверное имя пользователя или пароль, лох');

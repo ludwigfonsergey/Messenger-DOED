@@ -35,6 +35,8 @@
         .contact{display:flex;align-items:center;gap:15px;padding:15px;border-radius:10px;margin-bottom:10px;cursor:pointer;transition:all 0.3s;}
         .contact:hover,.contact.active{background:var(--msg-bg);transform:translateX(5px);}
         .contact-avatar{width:45px;height:45px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-weight:bold;background-size:cover;background-position:center;}
+        .contact.banned{opacity:0.6;background:#2a2a2a;}
+        .contact.banned .contact-avatar{background:#4a4a4a;color:#888;}
         .chat-container{flex:1;display:flex;flex-direction:column;padding:20px;}
         .messages-container{flex:1;overflow-y:auto;padding:20px;background:rgba(15,52,96,0.2);border-radius:15px;margin-bottom:20px;display:flex;flex-direction:column;gap:15px;}
         .message{max-width:70%;padding:15px;border-radius:15px;position:relative;animation:appear 0.3s ease-out;}
@@ -43,6 +45,9 @@
         .message.sent{background:var(--red);align-self:flex-end;}
         .message-sender{font-weight:bold;margin-bottom:8px;color:var(--text);}
         .message-time{font-size:12px;color:var(--gray);text-align:right;margin-top:8px;}
+        .message-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+        .report-btn{background:none;border:none;color:var(--gray);cursor:pointer;font-size:14px;padding:5px;border-radius:5px;transition:all 0.3s;}
+        .report-btn:hover{background:var(--red);color:white;transform:scale(1.1);}
         .message-input-container{display:flex;gap:10px;padding:15px;background:var(--light);border-radius:15px;border:2px solid var(--border);}
         .message-input{flex:1;padding:15px;border:none;border-radius:10px;background:var(--dark);color:var(--text);font-size:16px;}
         .send-button{background:var(--red);color:white;border:none;border-radius:10px;width:60px;cursor:pointer;font-size:20px;}
@@ -65,6 +70,62 @@
         .profile-name:hover{background:rgba(255,255,255,0.1);}
         .profile-tag{font-size:11px;color:var(--gray);}
         .profile-status{font-size:12px;color:var(--gray);}
+        
+        /* Кнопка звука */
+        .sound-toggle {
+            background: var(--msg-bg);
+            color: var(--text);
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 5px;
+            margin-right: 5px;
+        }
+        .sound-toggle:hover {
+            background: var(--red);
+        }
+        .sound-toggle.off {
+            background: var(--dark-red);
+            opacity: 0.7;
+        }
+        
+        .admin-link {
+            background: var(--purple);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 5px;
+            margin-right: 5px;
+            text-decoration: none;
+        }
+        .admin-link:hover {
+            background: var(--blue);
+            transform: translateY(-2px);
+        }
+        
+        .logout-button {
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 5px;
+        }
+        .logout-button:hover {
+            background: var(--dark-red);
+            transform: translateY(-2px);
+        }
+        
         .profile-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:2000;display:none;align-items:center;justify-content:center;}
         .profile-modal-content{background:var(--light);padding:30px;border-radius:15px;width:90%;max-width:400px;border:3px solid var(--red);}
         .profile-modal-header{font-size:24px;font-weight:bold;margin-bottom:20px;color:var(--red);text-align:center;}
@@ -80,7 +141,7 @@
         .profile-button.cancel{background:var(--border);color:var(--text);}
         .profile-button.cancel:hover{background:var(--gray);color:var(--dark);}
 
-        /* Стили поиска */
+        /* Стили поиска и файлов */
         .search-container {
             padding: 10px;
             margin-bottom: 15px;
@@ -108,6 +169,8 @@
             border-radius: 10px;
             padding: 10px;
             display: none;
+            max-height: 200px;
+            overflow-y: auto;
         }
         
         .search-result {
@@ -123,6 +186,82 @@
         .search-result:hover {
             background: var(--msg-bg);
         }
+
+        .file-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--msg-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        .file-button:hover {
+            background: var(--red);
+            transform: rotate(45deg);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--dark);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .file-icon {
+            font-size: 24px;
+            color: var(--red);
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .file-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 8px;
+            margin-top: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-message:hover {
+            background: rgba(0,0,0,0.4);
+        }
+
+        .cancel-file {
+            background: none;
+            border: none;
+            color: var(--red);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Стили для каналов */
+        .post-header{font-size:18px;font-weight:bold;margin-bottom:15px;color:#ffd700;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:5px;}
+        .post-footer{margin-top:15px;font-style:italic;color:var(--gray);border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;}
+        .channel-post{line-height:1.6;}
+        .channel-post p{margin-bottom:10px;}
 
         /* Мобильная адаптация */
         @media (max-width: 768px) {
@@ -235,12 +374,17 @@
             <div class="logo-text">DOED</div>
         </div>
         
-        <!-- Секция профиля -->
+        <!-- Секция профиля с кнопками -->
         <div class="profile-section">
             <div class="profile-info">
                 <div class="profile-name" id="profileNameDisplay">Гость</div>
                 <div class="profile-tag" id="profileTagDisplay">@guest</div>
                 <div class="profile-status" id="profileStatusDisplay">в сети</div>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Звук вкл</button>
+                    <a href="/admin" class="admin-link" id="adminLink" style="display: none;">👑 Админка</a>
+                    <button class="logout-button" id="logoutButton" onclick="logout()">🚪 Выйти</button>
+                </div>
             </div>
             <div class="profile-avatar" id="profileAvatar">
                 👤
@@ -254,7 +398,7 @@
         <div class="contacts-panel" id="contactsPanel">
             <!-- Поле поиска пользователей -->
             <div class="search-container">
-                <input type="text" id="userSearch" class="search-input" placeholder="🔍 Поиск по @тегу...">
+                <input type="text" id="userSearch" class="search-input" placeholder="🔍 Поиск по имени или @тегу...">
                 <div class="search-results" id="searchResults"></div>
             </div>
             
@@ -313,6 +457,10 @@
             </div>
             
             <div class="message-input-container" id="messageInputContainer">
+                <button class="file-button" id="fileButton" title="Прикрепить файл">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <input type="file" id="fileInput" style="display: none;">
                 <input type="text" class="message-input" id="messageInput" placeholder="Напишите сообщение..." autocomplete="off">
                 <button class="send-button" id="sendButton"><i class="fas fa-paper-plane"></i></button>
             </div>
@@ -324,101 +472,201 @@
     <div class="notification" id="notification">Новое сообщение</div>
 
     <script>
-        /**
-         * ============================================
-         * DOED MESSENGER - ПОЛНЫЙ КЛИЕНТ
-         * ============================================
-         */
+        // ============================================
+        // DOED MESSENGER - ПОЛНЫЙ КЛИЕНТ
+        // ============================================
 
         // ============================================
         // 1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
         // ============================================
         
-        // Текущий пользователь
         let currentUser = {
             id: null,
             username: 'Гость',
             tag: 'guest',
             status: 'в сети',
-            avatar: '👤'
+            avatar: '👤',
+            is_admin: false
         };
 
-        // Текущий открытый чат
         let currentChat = {
             id: 'derdchat',
             name: 'Чеченский чат'
         };
 
-        // WebSocket соединение
         let socket = null;
-
-        // История сообщений
         let messageHistory = {};
-
-        // Настройки
-        let settings = {
-            soundEnabled: true
+        let messageCounter = 0;
+        let gmdDeleted = false;
+        let putinDeleted = false;
+        
+        let settings = { 
+            soundEnabled: localStorage.getItem('doed_sound') !== 'false'
         };
 
-        // Демо-контакты (для отображения)
+        // Демо-контакты с сообщениями
         const demoContacts = {
-            'derdchat': { name: 'Чеченский чат', members: ['Саид', 'Хасий', 'Али'] },
-            'vernam': { name: 'Vernam AI' },
-            'sglypa': { name: 'Сглыпа' },
-            'eiriley': { name: 'Eiriley' },
-            'dolfi': { name: 'Дольфи' },
-            'derd': { name: 'Derd' },
-            'doed': { name: 'Doed' },
-            'putin': { name: 'Канал В.В.Путина', isChannel: true },
-            'gmd': { name: 'ГЭМДЭ НЬЮС', isChannel: true },
-            'booker': { name: 'Федя Букер' }
+            'derdchat': {
+                name: 'Чеченский чат',
+                members: ['Саид', 'Хасий', 'Али', 'Ахмед', 'Рамзан'],
+                responses: [
+                    "95 ДОН ЧЕЧНЯ! 🇷🇺",
+                    "ЧЕЧНЯ ВЕЛИК СТОРАНА! 🏔️",
+                    "95! 💪",
+                    "ВАЙНАХ! ⚔️",
+                    "Грозный - лучший город! 🏙️"
+                ],
+                isChannel: false
+            },
+            'vernam': {
+                name: 'Vernam AI',
+                responses: [
+                    "Cherry Team? Все их уровни - просто имба! 🔥",
+                    "Как тебе втрах? Имба, конечно! 🚀",
+                    "Вратх? Это просто имбово! 💪",
+                    "Cherry Team - это боги маппинга! ⭐"
+                ],
+                isChannel: false
+            },
+            'sglypa': {
+                name: 'Сглыпа',
+                responses: [
+                    "Ты серьёзно это написал? Хуй соси, братан! 🍺",
+                    "Что за пиздёж ты несёшь? 🤮",
+                    "Твой интеллект как у хуя с ушами! 🖕",
+                    "Иди нахуй, кретин! 💩"
+                ],
+                isChannel: false
+            },
+            'eiriley': {
+                name: 'Eiriley',
+                responses: [
+                    "ЫЫЫЫЫЫ ПАССРЕЙТ МАЙНДБЛОК!!! 🤯",
+                    "Я ТИПО УМНЫЙ, А ВЫ ВСЕ ДУРАКИ! 🧠",
+                    "МОЙ МОЗГ РАБОТАЕТ НА 300%! ⚡",
+                    "АХАХАХА, Я ВАС ВСЕХ ПЕРЕИГРАЛ! ♟️"
+                ],
+                isChannel: false
+            },
+            'dolfi': {
+                name: 'Дольфи',
+                responses: [
+                    "Дрочи на моё говно! 💩",
+                    "Я дрочу на твои фотки! 📸",
+                    "Хуй встаёт сильно, хочется дрочить",
+                    "Давай встречаться"
+                ],
+                isChannel: false
+            },
+            'derd': {
+                name: 'Derd',
+                responses: [
+                    "Derd лучший ютубер! 🎬 Подписывайтесь на канал!",
+                    "Новый ролик скоро выйдет! 🎥",
+                    "Геймплей просто огонь! 🔥",
+                    "Спасибо за поддержку! 🙏"
+                ],
+                isChannel: false
+            },
+            'doed': {
+                name: 'Doed',
+                responses: [
+                    "Doed пошёл нахуй! 🖕",
+                    "Сам такой! 😤",
+                    "Отстань! 🙄",
+                    "Иди лесом! 🌳"
+                ],
+                isChannel: false
+            },
+            'putin': {
+                name: 'Канал В.В.Путина',
+                responses: [
+                    `🇷🇺 Официальное заявление от администрации президента\n\nВладимир Владимирович Путин провел сегодня важное совещание по вопросам экономического развития страны.\n\nБыли обсуждены ключевые направления роста.`,
+                    
+                    `🛡️ Совещание по национальной безопасности\n\nПод председательством Верховного Главнокомандующего прошло расширенное совещание Совета Безопасности.\n\nОсновными темами обсуждения стали меры по обеспечению защиты государственных границ.`,
+                    
+                    `🌍 Международная дипломатия\n\nРоссия продолжает активную работу на международной арене, укрепляя позиции в ключевых регионах мира.\n\nБыли достигнуты важные договоренности с партнерами по БРИКС и ШОС.`,
+                    
+                    `💼 Социальные инициативы\n\nПравительство РФ представило новый пакет социальных мер поддержки населения.\n\nВ рамках программы будут увеличены выплаты многодетным семьям.`
+                ],
+                isChannel: true,
+                reactions: { '👍': 0, '❤️': 0, '🇷🇺': 0, '👏': 0, '💩': 0 },
+                deleted: false
+            },
+            'gmd': {
+                name: 'ГЭМДЭ НЬЮС',
+                responses: [
+                    `🍌 Сенсационное открытие в космической биологии\n\nУченые обнаружили, что бананы обладают способностью играть в шахматы на лунной поверхности.\n\nЭксперимент проводился в условиях искусственной гравитации при участии пингвинов-астронавтов.\n\nGMD news. подписаться`,
+                    
+                    `🐱 Межгалактический чайный клуб\n\nКосмические коты основали первый в истории кафе на окраине Млечного Пути.\n\nЗаведение специализируется на чайных церемониях с участием представителей внеземных цивилизаций.\n\nGMD news. подписаться`,
+                    
+                    `🍬 Метеорологический феномен в Сибири\n\nВ течение трех часов с неба падали конфеты различных сортов и размеров.\n\nМестные жители оперативно организовали сбор сладостей.\n\nGMD news. подписаться`,
+                    
+                    `🤖 Культурное событие в цифровую эпоху\n\nРоботы нового поколения исполнили классический балет "Лебединое озеро".\n\nМузыкальное сопровождение обеспечивал оркестр, играющий на процессорах.\n\nGMD news. подписаться`
+                ],
+                isChannel: true,
+                reactions: { '😂': 0, '🤔': 0, '👌': 0, '🔥': 0, '💩': 0 },
+                deleted: false
+            },
+            'booker': {
+                name: 'Федя Букер',
+                responses: [
+                    "Эта музыка вечна, пока играет грув! 🎵",
+                    "Дым сигарет с ментолом, я в облаках парю! ☁️",
+                    "Каждый день - как праздник, если рядом ты! 🎉",
+                    "Танцуем до упаду, пока играет funk! 💃"
+                ],
+                isChannel: false
+            }
+        };
+
+        // Глобальные реакции для каналов
+        const globalReactions = {
+            putin: {},
+            gmd: {}
         };
 
         // ============================================
-        // 2. ЗАГРУЗКА ДАННЫХ ПОЛЬЗОВАТЕЛЯ
+        // 2. ФУНКЦИИ ПРОФИЛЯ
         // ============================================
 
-        async function loadCurrentUser() {
-            try {
-                const response = await fetch('/api/me');
-                if (response.ok) {
-                    const userData = await response.json();
-                    if (!userData.error) {
-                        currentUser = {
-                            id: userData.id,
-                            username: userData.username,
-                            tag: userData.tag,
-                            status: userData.status || 'в сети',
-                            avatar: userData.avatar || '👤'
-                        };
-                        updateProfileDisplay();
-                        console.log('✅ User loaded:', currentUser);
-                    }
-                } else {
-                    console.log('User not authenticated');
-                }
-            } catch (error) {
-                console.error('Error loading user:', error);
-            }
+        function resetToGuest() {
+            currentUser = {
+                id: null,
+                username: 'Гость',
+                tag: 'guest',
+                status: 'в сети',
+                avatar: '👤',
+                is_admin: false
+            };
+            updateProfileDisplay();
+            
+            const adminLink = document.getElementById('adminLink');
+            if (adminLink) adminLink.style.display = 'none';
         }
 
-        // ============================================
-        // 3. ФУНКЦИИ ПРОФИЛЯ
-        // ============================================
-
         function updateProfileDisplay() {
-            document.getElementById('profileNameDisplay').textContent = currentUser.username;
-            document.getElementById('profileTagDisplay').textContent = '@' + currentUser.tag;
-            document.getElementById('profileStatusDisplay').textContent = currentUser.status;
-            document.getElementById('profileAvatar').textContent = currentUser.avatar;
+            console.log("🔄 Обновление профиля:", currentUser);
             
-            // Обновляем в модальном окне
+            const nameDisplay = document.getElementById('profileNameDisplay');
+            const tagDisplay = document.getElementById('profileTagDisplay');
+            const statusDisplay = document.getElementById('profileStatusDisplay');
+            const avatarDisplay = document.getElementById('profileAvatar');
+            
+            if (nameDisplay) nameDisplay.textContent = currentUser.username;
+            if (tagDisplay) tagDisplay.textContent = '@' + currentUser.tag;
+            if (statusDisplay) statusDisplay.textContent = currentUser.status;
+            if (avatarDisplay) avatarDisplay.textContent = currentUser.avatar;
+            
             const modalTagInput = document.getElementById('profileTagDisplay');
-            if (modalTagInput) modalTagInput.value = '@' + currentUser.tag;
             const modalNameInput = document.getElementById('profileNameInput');
-            if (modalNameInput) modalNameInput.value = currentUser.username;
             const modalStatusInput = document.getElementById('profileStatusInput');
+            
+            if (modalTagInput) modalTagInput.value = '@' + currentUser.tag;
+            if (modalNameInput) modalNameInput.value = currentUser.username;
             if (modalStatusInput) modalStatusInput.value = currentUser.status;
+            
+            updateSoundButton();
         }
 
         function openProfileModal() {
@@ -438,7 +686,6 @@
                 return;
             }
             
-            // Пока просто обновляем локально
             currentUser.username = newName;
             currentUser.status = newStatus || 'в сети';
             
@@ -448,65 +695,208 @@
         }
 
         // ============================================
-        // 4. WEBSOCKET СОЕДИНЕНИЕ
+        // 3. УПРАВЛЕНИЕ ЗВУКОМ
+        // ============================================
+
+        function toggleSound() {
+            settings.soundEnabled = !settings.soundEnabled;
+            localStorage.setItem('doed_sound', settings.soundEnabled);
+            updateSoundButton();
+            showNotification(settings.soundEnabled ? '🔊 Звук включен' : '🔇 Звук выключен');
+        }
+
+        function updateSoundButton() {
+            const btn = document.getElementById('soundToggle');
+            if (btn) {
+                btn.textContent = settings.soundEnabled ? '🔊 Звук вкл' : '🔇 Звук выкл';
+                btn.classList.toggle('off', !settings.soundEnabled);
+            }
+        }
+
+        // ============================================
+        // 4. ФУНКЦИЯ ЗВУКА НАКОВАЛЬНИ
+        // ============================================
+
+        function playAnvilSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const now = audioContext.currentTime;
+                
+                const osc1 = audioContext.createOscillator();
+                osc1.type = 'triangle';
+                osc1.frequency.value = 440;
+                
+                const osc2 = audioContext.createOscillator();
+                osc2.type = 'sine';
+                osc2.frequency.value = 220;
+                
+                const noise = audioContext.createBufferSource();
+                const buffer = audioContext.createBuffer(1, 1000, audioContext.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < 1000; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                noise.buffer = buffer;
+                
+                const gain1 = audioContext.createGain();
+                const gain2 = audioContext.createGain();
+                const gainNoise = audioContext.createGain();
+                
+                gain1.gain.setValueAtTime(0.8, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                
+                gain2.gain.setValueAtTime(0.5, now);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+                
+                gainNoise.gain.setValueAtTime(0.3, now);
+                gainNoise.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                
+                osc1.connect(gain1).connect(audioContext.destination);
+                osc2.connect(gain2).connect(audioContext.destination);
+                noise.connect(gainNoise).connect(audioContext.destination);
+                
+                osc1.start(now);
+                osc1.stop(now + 0.5);
+                
+                osc2.start(now);
+                osc2.stop(now + 0.8);
+                
+                noise.start(now);
+                noise.stop(now + 0.3);
+                
+                console.log("🔨 Звук наковальни воспроизведен");
+            } catch (e) {
+                console.log("Не удалось воспроизвести звук наковальни");
+            }
+        }
+
+        // ============================================
+        // 5. ВЫХОД ИЗ АККАУНТА
+        // ============================================
+
+        async function logout() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                try {
+                    const response = await fetch('/logout');
+                    window.location.href = '/';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    window.location.href = '/';
+                }
+            }
+        }
+
+        // ============================================
+        // 6. WEBSOCKET
         // ============================================
 
         function initWebSocket() {
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             socket = new WebSocket(`${protocol}//${window.location.host}/ws`);
             
-            socket.onopen = function() {
-                console.log('✅ WebSocket connected');
-            };
+            socket.onopen = () => console.log('✅ WebSocket connected');
             
-            socket.onmessage = function(event) {
+            socket.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
                     console.log('📩 WebSocket message:', data);
                     
                     if (data.type === 'new_message') {
                         handleNewMessage(data);
-                    }
-                    else if (data.type === 'message_sent') {
-                        console.log('Message sent confirmed');
+                    } else if (data.type === 'file_message') {
+                        handleFileMessage(data);
+                    } else if (data.type === 'error') {
+                        showNotification(data.message);
+                    } else if (data.type === 'banned') {
+                        playAnvilSound();
+                        showNotification("🔨 ВАС ЗАБАНИЛИ!");
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 2000);
                     }
                 } catch (e) {
                     console.error('Error parsing message:', e);
                 }
             };
             
-            socket.onclose = function() {
+            socket.onclose = () => {
                 console.log('❌ WebSocket disconnected, reconnecting...');
                 setTimeout(initWebSocket, 3000);
             };
             
-            socket.onerror = function(error) {
-                console.error('WebSocket error:', error);
-            };
+            socket.onerror = (error) => console.error('WebSocket error:', error);
         }
 
         // ============================================
-        // 5. ОБРАБОТКА СООБЩЕНИЙ
+        // 7. ЗАГРУЗКА КОНТАКТОВ
+        // ============================================
+
+        async function loadContacts() {
+            try {
+                const response = await fetch('/api/contacts/list');
+                if (response.ok) {
+                    const contacts = await response.json();
+                    console.log('📇 Загруженные контакты:', contacts);
+                    
+                    document.querySelectorAll('.contact[data-contact^="user_"]').forEach(el => el.remove());
+                    
+                    const contactsPanel = document.getElementById('contactsPanel');
+                    
+                    contacts.forEach(contact => {
+                        if (!document.querySelector(`.contact[data-contact="user_${contact.contact_id}"]`)) {
+                            const contactElement = document.createElement('div');
+                            contactElement.className = 'contact';
+                            contactElement.setAttribute('data-contact', `user_${contact.contact_id}`);
+                            
+                            if (contact.name === "👻 ЗАБАНЕН") {
+                                contactElement.classList.add('banned');
+                                contactElement.innerHTML = `
+                                    <div class="contact-avatar">👻</div>
+                                    <div>👻 ЗАБАНЕН</div>
+                                `;
+                            } else {
+                                contactElement.innerHTML = `
+                                    <div class="contact-avatar">👤</div>
+                                    <div>${escapeHtml(contact.name)}</div>
+                                `;
+                            }
+                            
+                            contactElement.addEventListener('click', () => {
+                                if (!contactElement.classList.contains('banned')) {
+                                    switchToChat(`user_${contact.contact_id}`);
+                                } else {
+                                    showNotification("👻 Этот пользователь забанен");
+                                }
+                            });
+                            
+                            const firstDemo = document.querySelector('.contact[data-contact="derdchat"]');
+                            if (firstDemo) {
+                                firstDemo.insertAdjacentElement('beforebegin', contactElement);
+                            } else {
+                                contactsPanel.appendChild(contactElement);
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+            }
+        }
+
+        // ============================================
+        // 8. ОБРАБОТКА СООБЩЕНИЙ
         // ============================================
 
         function handleNewMessage(data) {
             const senderId = data.sender_id;
             const currentChatId = currentChat.id;
             
-            let isCurrentChat = false;
-            if (currentChatId === `user_${senderId}`) {
-                isCurrentChat = true;
-            }
+            let isCurrentChat = currentChatId === `user_${senderId}`;
             
-            const msgElement = createMessageElement(
-                data.sender_name,
-                data.content,
-                true
-            );
+            const msgElement = createMessageElement(data.sender_name, data.content, true, data.id);
             
-            if (!messageHistory[senderId]) {
-                messageHistory[senderId] = [];
-            }
+            if (!messageHistory[senderId]) messageHistory[senderId] = [];
             messageHistory[senderId].push(msgElement);
             
             if (isCurrentChat) {
@@ -514,211 +904,504 @@
                 scrollToBottom();
             } else {
                 highlightContact(senderId, data.sender_name);
-                showNotification(`✉️ Новое сообщение от ${data.sender_name}`);
+                showNotification(`✉️ Личное сообщение от ${data.sender_name}`);
             }
             
             if (settings.soundEnabled) {
                 playSound('https://assets.mixkit.co/active_storage/sfx/1/1-preview.mp3');
             }
+            
+            loadContacts();
+        }
+
+        function handleFileMessage(data) {
+            const senderId = data.sender_id;
+            const currentChatId = currentChat.id;
+            
+            let isCurrentChat = currentChatId === `user_${senderId}`;
+            
+            const fileData = {
+                id: data.file_id,
+                name: data.file_name,
+                size: data.file_size,
+                path: data.file_path
+            };
+            
+            const msgElement = createFileMessageElement(data.sender_name, fileData, true, data.id);
+            
+            if (!messageHistory[senderId]) messageHistory[senderId] = [];
+            messageHistory[senderId].push(msgElement);
+            
+            if (isCurrentChat) {
+                document.getElementById('messagesContainer').appendChild(msgElement);
+                scrollToBottom();
+            } else {
+                highlightContact(senderId, data.sender_name);
+                showNotification(`📁 Файл от ${data.sender_name}: ${data.file_name}`);
+            }
+            
+            if (settings.soundEnabled) {
+                playSound('https://assets.mixkit.co/active_storage/sfx/1/1-preview.mp3');
+            }
+            
+            loadContacts();
         }
 
         function highlightContact(userId, username) {
             const contact = document.querySelector(`.contact[data-contact="user_${userId}"]`);
-            
-            if (contact) {
+            if (contact && !contact.classList.contains('banned')) {
                 contact.style.background = 'var(--msg-bg)';
                 contact.style.borderLeft = '3px solid var(--red)';
-            } else {
-                addTemporaryContact(userId, username);
             }
         }
 
-        function addTemporaryContact(userId, username) {
-            if (document.querySelector(`.contact[data-contact="user_${userId}"]`)) {
+        // ============================================
+        // 9. ФУНКЦИЯ ЖАЛОБЫ
+        // ============================================
+
+        async function reportMessage(messageId, senderName) {
+            if (!currentUser.id) {
+                showNotification('❌ Войдите в систему чтобы пожаловаться');
                 return;
             }
             
-            const contactsPanel = document.querySelector('.contacts-panel');
-            const searchContainer = document.querySelector('.search-container');
+            const reason = prompt(`Укажите причину жалобы на сообщение от ${senderName}:`);
+            if (!reason) return;
             
-            const newContact = document.createElement('div');
-            newContact.className = 'contact';
-            newContact.setAttribute('data-contact', `user_${userId}`);
-            newContact.style.background = 'var(--msg-bg)';
-            newContact.style.borderLeft = '3px solid var(--red)';
-            newContact.innerHTML = `
-                <div class="contact-avatar">👤</div>
-                <div>${username}</div>
-            `;
-            
-            newContact.addEventListener('click', function() {
-                switchToChat(`user_${userId}`);
-            });
-            
-            searchContainer.insertAdjacentElement('afterend', newContact);
+            try {
+                const response = await fetch('/api/messages/report', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message_id: messageId,
+                        reason: reason
+                    })
+                });
+                
+                if (response.ok) {
+                    showNotification('✅ Жалоба отправлена администратору');
+                } else {
+                    const data = await response.json();
+                    showNotification(`❌ ${data.detail || 'Ошибка при отправке жалобы'}`);
+                }
+            } catch (error) {
+                console.error('Report error:', error);
+                showNotification('❌ Ошибка сети');
+            }
         }
 
         // ============================================
-        // 6. ОТПРАВКА СООБЩЕНИЙ
+        // 10. БОТЫ И КАНАЛЫ
         // ============================================
 
-        async function sendMessage() {
-            if (demoContacts[currentChat.id]?.isChannel) {
-                showNotification('📢 Это канал. Писать нельзя');
-                return;
+        function addBotMessage(chatId) {
+            if (currentChat.id !== chatId) return;
+            
+            const contact = demoContacts[chatId];
+            if (!contact || contact.isChannel) return;
+            
+            let sender = contact.name;
+            let response = contact.responses[Math.floor(Math.random() * contact.responses.length)];
+            
+            if (chatId === 'derdchat') {
+                sender = contact.members[Math.floor(Math.random() * contact.members.length)];
             }
             
-            if (!currentChat.id.startsWith('user_')) {
-                showNotification('Выберите чат с пользователем');
-                return;
-            }
+            const msg = createMessageElement(sender, response, true, Date.now());
             
-            const input = document.getElementById('messageInput');
-            const text = input.value.trim();
-            if (!text) return;
-            
-            const receiverId = parseInt(currentChat.id.replace('user_', ''));
-            
-            const msgElement = createMessageElement(currentUser.username, text, false);
-            
-            if (!messageHistory[receiverId]) {
-                messageHistory[receiverId] = [];
-            }
-            messageHistory[receiverId].push(msgElement);
-            
-            document.getElementById('messagesContainer').appendChild(msgElement);
-            input.value = '';
+            if (!messageHistory[chatId]) messageHistory[chatId] = [];
+            messageHistory[chatId].push(msg);
+            document.getElementById('messagesContainer').appendChild(msg);
             scrollToBottom();
             
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                const messageData = {
-                    type: 'message',
-                    receiver_id: receiverId,
-                    content: text
-                };
-                socket.send(JSON.stringify(messageData));
-                console.log('📤 Message sent:', messageData);
+            if (settings.soundEnabled) {
+                playSound('https://assets.mixkit.co/active_storage/sfx/1/1-preview.mp3');
+            }
+            
+            showNotification(`Новое сообщение от ${sender}`);
+        }
+
+        function addChannelMessage(chatId) {
+            if (currentChat.id !== chatId) return;
+            
+            const contact = demoContacts[chatId];
+            if (!contact || !contact.isChannel) return;
+            
+            if ((chatId === 'gmd' && gmdDeleted) || (chatId === 'putin' && putinDeleted)) {
+                return;
+            }
+            
+            const response = contact.responses[Math.floor(Math.random() * contact.responses.length)];
+            const msg = createChannelMessage(chatId, response);
+            
+            if (!messageHistory[chatId]) messageHistory[chatId] = [];
+            messageHistory[chatId].push(msg);
+            document.getElementById('messagesContainer').appendChild(msg);
+            scrollToBottom();
+            
+            showNotification(`Новый пост в ${contact.name}`);
+        }
+
+        function createChannelMessage(chatId, response) {
+            const contact = demoContacts[chatId];
+            const msgId = `msg_${chatId}_${Date.now()}_${messageCounter++}`;
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message received';
+            msgDiv.id = msgId;
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            let formattedText = response;
+            if (chatId === 'putin' || chatId === 'gmd') {
+                formattedText = formatPostText(response, chatId);
+            }
+            
+            let reactions = contact.reactions || {};
+            let reactionsHtml = '<div class="reactions">';
+            Object.keys(reactions).forEach(emoji => {
+                reactionsHtml += `<span class="reaction" onclick="addReaction('${chatId}', '${msgId}', '${emoji}')">${emoji} ${reactions[emoji]}</span>`;
+            });
+            reactionsHtml += '</div>';
+            
+            msgDiv.innerHTML = `
+                <div class="message-sender">${contact.name}</div>
+                <div class="message-text channel-post">${formattedText}</div>
+                ${reactionsHtml}
+                <div class="message-time">${time}</div>
+            `;
+            
+            return msgDiv;
+        }
+
+        function formatPostText(text, channelId) {
+            const paragraphs = text.split('\n\n');
+            let formattedHtml = '';
+            
+            if (channelId === 'putin') {
+                if (paragraphs.length > 0) {
+                    formattedHtml += `<div class="post-header">${paragraphs[0]}</div>`;
+                    for (let i = 1; i < paragraphs.length; i++) {
+                        if (paragraphs[i].trim()) {
+                            formattedHtml += `<p>${paragraphs[i].trim()}</p>`;
+                        }
+                    }
+                }
+            } else if (channelId === 'gmd') {
+                for (let i = 0; i < paragraphs.length; i++) {
+                    if (paragraphs[i].trim()) {
+                        if (i === paragraphs.length - 1 && paragraphs[i].includes('GMD news. подписаться')) {
+                            formattedHtml += `<div class="post-footer">${paragraphs[i].trim()}</div>`;
+                        } else {
+                            formattedHtml += `<p>${paragraphs[i].trim()}</p>`;
+                        }
+                    }
+                }
+            }
+            
+            return formattedHtml;
+        }
+
+        function addReaction(chatId, msgId, emoji) {
+            showNotification(`Вы поставили реакцию ${emoji}`);
+            
+            if (chatId === 'gmd' && emoji === '💩' && !gmdDeleted) {
+                deleteChannel('gmd');
+            }
+        }
+
+        function deleteChannel(channelId) {
+            const deleteMessage = document.getElementById('channelDeletedMessage');
+            deleteMessage.style.display = 'block';
+            
+            let countdown = 10;
+            const countdownElement = document.getElementById('deleteCountdown');
+            countdownElement.textContent = countdown;
+            
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    deleteMessage.style.display = 'none';
+                    
+                    if (channelId === 'gmd') {
+                        gmdDeleted = true;
+                        demoContacts.gmd.deleted = true;
+                    } else if (channelId === 'putin') {
+                        putinDeleted = true;
+                        demoContacts.putin.deleted = true;
+                    }
+                    
+                    const contactElement = document.querySelector(`.contact[data-contact="${channelId}"]`);
+                    if (contactElement) {
+                        contactElement.classList.add('deleted');
+                        contactElement.innerHTML = `
+                            <div class="contact-avatar">💔</div>
+                            <div>${demoContacts[channelId].name} (удалён)</div>
+                        `;
+                    }
+                    
+                    if (currentChat.id === channelId) {
+                        switchToChat('derdchat');
+                    }
+                    
+                    playSound('https://assets.mixkit.co/active_storage/sfx/274/274-preview.mp3');
+                    showNotification(`Канал ${demoContacts[channelId].name} был удалён 😢`);
+                }
+            }, 1000);
+        }
+
+        // ============================================
+        // 11. ОТПРАВКА СООБЩЕНИЙ И ФАЙЛОВ
+        // ============================================
+
+        const fileButton = document.getElementById('fileButton');
+        const fileInput = document.getElementById('fileInput');
+        let selectedFile = null;
+
+        fileButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            selectedFile = e.target.files[0];
+            if (selectedFile) {
+                if (selectedFile.size > 50 * 1024 * 1024) {
+                    showNotification('❌ Файл слишком большой (макс 50MB)');
+                    selectedFile = null;
+                    fileInput.value = '';
+                    return;
+                }
+                showFileInfo(selectedFile);
+            }
+        });
+
+        function showFileInfo(file) {
+            const fileInfo = document.createElement('div');
+            fileInfo.className = 'file-info';
+            fileInfo.id = 'selectedFileInfo';
+            
+            const size = formatFileSize(file.size);
+            
+            fileInfo.innerHTML = `
+                <div class="file-icon"><i class="fas fa-file"></i></div>
+                <div class="file-details">
+                    <div class="file-name">${escapeHtml(file.name)}</div>
+                    <div class="file-size">${size}</div>
+                </div>
+                <button class="cancel-file" onclick="cancelFile()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            const oldInfo = document.getElementById('selectedFileInfo');
+            if (oldInfo) oldInfo.remove();
+            
+            const inputContainer = document.querySelector('.message-input-container');
+            inputContainer.parentNode.insertBefore(fileInfo, inputContainer);
+        }
+
+        window.cancelFile = function() {
+            selectedFile = null;
+            fileInput.value = '';
+            const fileInfo = document.getElementById('selectedFileInfo');
+            if (fileInfo) fileInfo.remove();
+        };
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (selectedFile) {
+                if (currentChat.id.startsWith('user_')) {
+                    const receiverId = parseInt(currentChat.id.replace('user_', ''));
+                    await sendFile(receiverId);
+                }
+                return;
+            }
+            
+            if (!text) return;
+            
+            if (demoContacts[currentChat.id] && !demoContacts[currentChat.id].isChannel) {
+                addMessageToContainer(currentUser.username, text, false);
+                input.value = '';
+                
+                setTimeout(() => addBotMessage(currentChat.id), 1000);
                 
                 if (settings.soundEnabled) {
                     playSound('https://assets.mixkit.co/active_storage/sfx/311/311-preview.mp3');
                 }
-            } else {
-                showNotification('❌ Нет соединения с сервером');
-            }
-        }
-
-        // ============================================
-        // 7. ЗАГРУЗКА ИСТОРИИ
-        // ============================================
-
-        async function loadChatHistory(chatId) {
-            const container = document.getElementById('messagesContainer');
-            container.innerHTML = '';
-            
-            if (demoContacts[chatId]) {
-                loadDemoChat(chatId);
                 return;
             }
             
-            if (chatId.startsWith('user_')) {
-                const userId = parseInt(chatId.replace('user_', ''));
+            if (currentChat.id.startsWith('user_')) {
+                const receiverId = parseInt(currentChat.id.replace('user_', ''));
                 
-                try {
-                    const response = await fetch(`/api/messages/history/${userId}`);
-                    if (response.ok) {
-                        const messages = await response.json();
-                        console.log('Loaded history:', messages);
-                        
-                        messageHistory[userId] = [];
-                        
-                        messages.forEach(msg => {
-                            const msgElement = createMessageElement(
-                                msg.sender_name,
-                                msg.content,
-                                !msg.is_mine
-                            );
-                            messageHistory[userId].push(msgElement);
-                            container.appendChild(msgElement);
-                        });
-                        
-                        scrollToBottom();
+                const msgElement = createMessageElement(currentUser.username, text, false, Date.now());
+                
+                if (!messageHistory[receiverId]) messageHistory[receiverId] = [];
+                messageHistory[receiverId].push(msgElement);
+                
+                document.getElementById('messagesContainer').appendChild(msgElement);
+                input.value = '';
+                scrollToBottom();
+                
+                if (socket?.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({
+                        type: 'message',
+                        receiver_id: receiverId,
+                        content: text
+                    }));
+                    
+                    if (settings.soundEnabled) {
+                        playSound('https://assets.mixkit.co/active_storage/sfx/311/311-preview.mp3');
                     }
-                } catch (error) {
-                    console.error('Error loading history:', error);
+                } else {
+                    showNotification('❌ Нет соединения с сервером');
                 }
             }
         }
 
-        function loadDemoChat(chatId) {
-            const container = document.getElementById('messagesContainer');
-            const chat = demoContacts[chatId];
+        async function sendFile(receiverId) {
+            if (!selectedFile) return;
             
-            if (chatId === 'derdchat') {
-                addMessageToContainer('Чеченец 1', '95 ДОН ЧЕЧНЯ!', true);
-                addMessageToContainer('Чеченец 2', 'ЧЕЧНЯ ВЕЛИК СТОРАНА!', true);
-            } else if (chatId === 'vernam') {
-                addMessageToContainer('Vernam AI', 'Cherry Team - имба! 🔥', true);
-            } else if (chatId === 'putin') {
-                addMessageToContainer('Канал В.В.Путина', '🇷🇺 Официальное заявление...', true);
-                document.getElementById('channelNote').style.display = 'block';
-                document.getElementById('messageInputContainer').style.display = 'none';
-            } else {
-                document.getElementById('channelNote').style.display = 'none';
-                document.getElementById('messageInputContainer').style.display = 'flex';
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            
+            try {
+                showNotification('📤 Загрузка файла...');
+                
+                const response = await fetch(`/api/files/upload?receiver_id=${receiverId}`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const fileData = {
+                        id: data.message_id,
+                        name: data.file_name,
+                        size: data.file_size,
+                        path: data.file_path
+                    };
+                    
+                    const msgElement = createFileMessageElement(currentUser.username, fileData, false, data.message_id);
+                    
+                    if (!messageHistory[receiverId]) messageHistory[receiverId] = [];
+                    messageHistory[receiverId].push(msgElement);
+                    
+                    document.getElementById('messagesContainer').appendChild(msgElement);
+                    scrollToBottom();
+                    
+                    if (socket?.readyState === WebSocket.OPEN) {
+                        socket.send(JSON.stringify({
+                            type: 'file_message',
+                            receiver_id: receiverId,
+                            file_id: data.message_id,
+                            file_name: data.file_name,
+                            file_size: data.file_size,
+                            file_path: data.file_path,
+                            sender_name: currentUser.username
+                        }));
+                    }
+                    
+                    showNotification('✅ Файл отправлен');
+                    cancelFile();
+                    
+                } else {
+                    showNotification(`❌ ${data.detail || 'Ошибка загрузки'}`);
+                }
+            } catch (error) {
+                console.error('File upload error:', error);
+                showNotification('❌ Ошибка при отправке файла');
             }
         }
 
-        // ============================================
-        // 8. ПЕРЕКЛЮЧЕНИЕ ЧАТОВ
-        // ============================================
-
-        function switchToChat(chatId) {
-            currentChat.id = chatId;
-            
-            document.querySelectorAll('.contact').forEach(c => {
-                c.classList.remove('active');
-                c.style.background = '';
-                c.style.borderLeft = '';
-            });
-            
-            const contactElement = document.querySelector(`.contact[data-contact="${chatId}"]`);
-            if (contactElement) {
-                contactElement.classList.add('active');
-                const name = contactElement.querySelector('div:last-child').textContent;
-                currentChat.name = name;
-                document.getElementById('chatContactName').textContent = name;
-            }
-            
-            if (demoContacts[chatId]?.isChannel) {
-                document.getElementById('channelNote').style.display = 'block';
-                document.getElementById('messageInputContainer').style.display = 'none';
-            } else {
-                document.getElementById('channelNote').style.display = 'none';
-                document.getElementById('messageInputContainer').style.display = 'flex';
-            }
-            
-            loadChatHistory(chatId);
-        }
+        window.downloadFile = function(messageId) {
+            window.open(`/api/files/download/${messageId}`, '_blank');
+        };
 
         // ============================================
-        // 9. СОЗДАНИЕ СООБЩЕНИЙ
+        // 12. СОЗДАНИЕ ЭЛЕМЕНТОВ СООБЩЕНИЙ
         // ============================================
 
-        function createMessageElement(sender, text, isReceived) {
+        function createMessageElement(sender, text, isReceived, messageId = null) {
             const msgDiv = document.createElement('div');
             msgDiv.className = isReceived ? 'message received' : 'message sent';
             
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
+            const reportButton = (!isReceived || !messageId) ? '' : `
+                <button class="report-btn" onclick="reportMessage(${messageId}, '${sender}')" title="Пожаловаться">
+                    <i class="fas fa-flag"></i>
+                </button>
+            `;
+            
             if (isReceived) {
                 msgDiv.innerHTML = `
                     <div class="message-sender">${escapeHtml(sender)}</div>
                     <div class="message-text">${escapeHtml(text)}</div>
-                    <div class="message-time">${time}</div>
+                    <div class="message-footer">
+                        <span class="message-time">${time}</span>
+                        ${reportButton}
+                    </div>
                 `;
             } else {
                 msgDiv.innerHTML = `
                     <div class="message-text">${escapeHtml(text)}</div>
+                    <div class="message-time">${time}</div>
+                `;
+            }
+            
+            return msgDiv;
+        }
+
+        function createFileMessageElement(sender, fileData, isReceived, messageId = null) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = isReceived ? 'message received' : 'message sent';
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const fileSize = formatFileSize(fileData.size);
+            
+            const reportButton = (!isReceived || !messageId) ? '' : `
+                <button class="report-btn" onclick="reportMessage(${messageId}, '${sender}')" title="Пожаловаться">
+                    <i class="fas fa-flag"></i>
+                </button>
+            `;
+            
+            const fileHtml = `
+                <div class="file-message" onclick="downloadFile(${fileData.id})">
+                    <div class="file-icon"><i class="fas fa-file"></i></div>
+                    <div class="file-details">
+                        <div class="file-name">${escapeHtml(fileData.name)}</div>
+                        <div class="file-size">${fileSize}</div>
+                    </div>
+                    <div><i class="fas fa-download"></i></div>
+                </div>
+            `;
+            
+            if (isReceived) {
+                msgDiv.innerHTML = `
+                    <div class="message-sender">${escapeHtml(sender)}</div>
+                    <div class="message-text">${fileHtml}</div>
+                    <div class="message-footer">
+                        <span class="message-time">${time}</span>
+                        ${reportButton}
+                    </div>
+                `;
+            } else {
+                msgDiv.innerHTML = `
+                    <div class="message-text">${fileHtml}</div>
                     <div class="message-time">${time}</div>
                 `;
             }
@@ -733,7 +1416,105 @@
         }
 
         // ============================================
-        // 10. ПОИСК ПОЛЬЗОВАТЕЛЕЙ (ИСПРАВЛЕНО)
+        // 13. ЗАГРУЗКА ИСТОРИИ
+        // ============================================
+
+        async function loadChatHistory(chatId) {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = '';
+            
+            if (demoContacts[chatId]) {
+                if (demoContacts[chatId].isChannel) {
+                    for (let i = 0; i < 3; i++) {
+                        const response = demoContacts[chatId].responses[i % demoContacts[chatId].responses.length];
+                        const msg = createChannelMessage(chatId, response);
+                        container.appendChild(msg);
+                    }
+                } else {
+                    if (messageHistory[chatId] && messageHistory[chatId].length > 0) {
+                        messageHistory[chatId].forEach(msg => container.appendChild(msg));
+                    } else {
+                        addMessageToContainer('Система', `Чат с ${demoContacts[chatId].name}`, true);
+                    }
+                }
+                scrollToBottom();
+                return;
+            }
+            
+            if (chatId.startsWith('user_')) {
+                const userId = parseInt(chatId.replace('user_', ''));
+                
+                try {
+                    const response = await fetch(`/api/messages/history/${userId}`);
+                    if (response.ok) {
+                        const messages = await response.json();
+                        messageHistory[userId] = [];
+                        
+                        messages.forEach(msg => {
+                            let msgElement;
+                            if (msg.is_file) {
+                                msgElement = createFileMessageElement(
+                                    msg.sender_name,
+                                    {
+                                        id: msg.id,
+                                        name: msg.file_name,
+                                        size: msg.file_size,
+                                        path: msg.file_path
+                                    },
+                                    !msg.is_mine,
+                                    msg.id
+                                );
+                            } else {
+                                msgElement = createMessageElement(
+                                    msg.sender_name,
+                                    msg.content,
+                                    !msg.is_mine,
+                                    msg.id
+                                );
+                            }
+                            messageHistory[userId].push(msgElement);
+                            container.appendChild(msgElement);
+                        });
+                        scrollToBottom();
+                    }
+                } catch (error) {
+                    console.error('Error loading history:', error);
+                }
+            }
+        }
+
+        function switchToChat(chatId) {
+            currentChat.id = chatId;
+            
+            document.querySelectorAll('.contact').forEach(c => {
+                c.classList.remove('active');
+                c.style.background = '';
+                c.style.borderLeft = '';
+            });
+            
+            const contactElement = document.querySelector(`.contact[data-contact="${chatId}"]`);
+            if (contactElement && !contactElement.classList.contains('banned')) {
+                contactElement.classList.add('active');
+                const nameElement = contactElement.querySelector('div:last-child');
+                if (nameElement) {
+                    currentChat.name = nameElement.textContent;
+                    document.getElementById('chatContactName').textContent = currentChat.name;
+                }
+            }
+            
+            if (demoContacts[chatId]?.isChannel) {
+                document.getElementById('channelNote').style.display = 'block';
+                document.getElementById('messageInputContainer').style.display = 'none';
+            } else {
+                document.getElementById('channelNote').style.display = 'none';
+                document.getElementById('messageInputContainer').style.display = 'flex';
+            }
+            
+            loadChatHistory(chatId);
+        }
+
+        // ============================================
+        // 14. ПОИСК ПОЛЬЗОВАТЕЛЕЙ
         // ============================================
 
         async function searchUser(query) {
@@ -745,30 +1526,31 @@
             }
             
             try {
-                console.log('Searching for:', query);
-                const response = await fetch(`/api/user/${query}`);
+                const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
                 
                 if (response.ok) {
-                    const user = await response.json();
-                    console.log('User found:', user);
+                    const users = await response.json();
                     
-                    if (user.id === currentUser.id) {
-                        resultsDiv.innerHTML = '<div style="color: var(--gray); text-align: center;">Это вы! Нельзя добавить себя</div>';
+                    if (users.length === 0) {
+                        resultsDiv.innerHTML = '<div style="color: var(--gray); text-align: center;">Ничего не найдено</div>';
                     } else {
-                        resultsDiv.innerHTML = `
-                            <div class="search-result" onclick='addUserToContacts(${JSON.stringify(user)})'>
-                                <div class="contact-avatar" style="width: 35px; height: 35px;">👤</div>
-                                <div>
-                                    <div><strong>${escapeHtml(user.username)}</strong></div>
-                                    <div style="color: var(--gray); font-size: 12px;">@${escapeHtml(user.tag)}</div>
-                                </div>
-                                <div style="margin-left: auto; color: var(--red);">➕ Добавить</div>
-                            </div>
-                        `;
+                        let html = '';
+                        users.forEach(user => {
+                            if (user.id !== currentUser.id && user.status !== "заблокирован") {
+                                html += `
+                                    <div class="search-result" onclick='addUserToContacts(${JSON.stringify(user)})'>
+                                        <div class="contact-avatar" style="width: 35px; height: 35px;">👤</div>
+                                        <div>
+                                            <div><strong>${escapeHtml(user.username)}</strong></div>
+                                            <div style="color: var(--gray); font-size: 12px;">@${escapeHtml(user.tag)}</div>
+                                        </div>
+                                        <div style="margin-left: auto; color: var(--red);">➕ Добавить</div>
+                                    </div>
+                                `;
+                            }
+                        });
+                        resultsDiv.innerHTML = html || '<div style="color: var(--gray); text-align: center;">Только вы или забаненные</div>';
                     }
-                    resultsDiv.style.display = 'block';
-                } else {
-                    resultsDiv.innerHTML = '<div style="color: var(--gray); text-align: center;">Пользователь не найден</div>';
                     resultsDiv.style.display = 'block';
                 }
             } catch (error) {
@@ -777,12 +1559,8 @@
             }
         }
 
-        // ИСПРАВЛЕННАЯ функция добавления в контакты
         async function addUserToContacts(user) {
             try {
-                console.log('Adding user to contacts:', user);
-                
-                // Проверяем авторизацию
                 if (!currentUser.id) {
                     showNotification('❌ Сначала войдите в систему');
                     return;
@@ -794,46 +1572,20 @@
                 
                 const response = await fetch('/api/contacts/add', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: formData
                 });
                 
-                const data = await response.json();
-                console.log('Add contact response:', data);
-                
                 if (response.ok) {
-                    showNotification(`✅ Пользователь @${user.tag} добавлен в контакты`);
+                    showNotification(`✅ Пользователь ${user.username} добавлен в контакты`);
                     
-                    // Создаем новый контакт в интерфейсе
-                    if (!document.querySelector(`.contact[data-contact="user_${user.id}"]`)) {
-                        const contactsPanel = document.querySelector('.contacts-panel');
-                        const searchContainer = document.querySelector('.search-container');
-                        
-                        const newContact = document.createElement('div');
-                        newContact.className = 'contact';
-                        newContact.setAttribute('data-contact', `user_${user.id}`);
-                        newContact.innerHTML = `
-                            <div class="contact-avatar">👤</div>
-                            <div>${escapeHtml(user.username)}</div>
-                        `;
-                        
-                        newContact.addEventListener('click', function() {
-                            switchToChat(`user_${user.id}`);
-                        });
-                        
-                        searchContainer.insertAdjacentElement('afterend', newContact);
-                    }
+                    loadContacts();
                     
-                    // Очищаем поиск
                     document.getElementById('userSearch').value = '';
                     document.getElementById('searchResults').style.display = 'none';
                     
-                    // Переключаемся на чат с новым контактом
-                    switchToChat(`user_${user.id}`);
-                    
                 } else {
+                    const data = await response.json();
                     showNotification(`❌ ${data.detail || 'Ошибка при добавлении'}`);
                 }
             } catch (error) {
@@ -843,7 +1595,7 @@
         }
 
         // ============================================
-        // 11. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        // 15. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
         // ============================================
 
         function showNotification(text) {
@@ -872,83 +1624,131 @@
         }
 
         // ============================================
-        // 12. ПРОВЕРКА АВТОРИЗАЦИИ
+        // 16. ПРОВЕРКА АВТОРИЗАЦИИ И ЗАГРУЗКА
         // ============================================
 
-        async function checkAuth() {
+        async function checkAuthAndLoadUser() {
+            console.log("🔍 Проверка авторизации...");
+            
             try {
                 const response = await fetch('/api/me');
-                const data = await response.json();
-                console.log('Auth check:', data);
-                return !data.error;
+                if (response.ok) {
+                    const userData = await response.json();
+                    console.log("✅ Авторизован, данные:", userData);
+                    
+                    if (!userData.error) {
+                        currentUser = {
+                            id: userData.id,
+                            username: userData.username,
+                            tag: userData.tag,
+                            status: userData.status || 'в сети',
+                            avatar: userData.avatar || '👤',
+                            is_admin: userData.is_admin || false
+                        };
+                        updateProfileDisplay();
+                        
+                        if (currentUser.is_admin) {
+                            document.getElementById('adminLink').style.display = 'inline-block';
+                        }
+                        
+                        loadContacts();
+                        initWebSocket();
+                        
+                        return true;
+                    }
+                }
             } catch (error) {
-                console.error('Auth check failed:', error);
-                return false;
+                console.error("❌ Ошибка проверки авторизации:", error);
             }
+            
+            console.log("❌ Не авторизован");
+            resetToGuest();
+            return false;
         }
 
         // ============================================
-        // 13. ИНИЦИАЛИЗАЦИЯ
+        // 17. ИНИЦИАЛИЗАЦИЯ
         // ============================================
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async () => {
             console.log('🚀 DOED Messenger starting...');
             
-            // Загружаем пользователя
-            loadCurrentUser();
+            const isAuthenticated = await checkAuthAndLoadUser();
             
-            // Подключаем WebSocket
-            initWebSocket();
+            if (!isAuthenticated && window.location.pathname === '/chat') {
+                console.log("🚫 Нет авторизации, редирект на логин через 2 секунды...");
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+                showNotification("❌ Вы не авторизованы, перенаправление...");
+            }
             
-            // Инициализируем демо-чат
-            loadDemoChat('derdchat');
+            switchToChat('derdchat');
             
-            // Обработчики
             document.getElementById('sendButton').addEventListener('click', sendMessage);
-            document.getElementById('messageInput').addEventListener('keypress', e => { 
+            document.getElementById('messageInput').addEventListener('keypress', (e) => { 
                 if (e.key === 'Enter') sendMessage(); 
             });
             
-            // Профиль
             document.getElementById('profileAvatar').addEventListener('click', openProfileModal);
             document.getElementById('profileNameDisplay').addEventListener('click', openProfileModal);
             document.getElementById('saveProfile').addEventListener('click', saveProfile);
             document.getElementById('cancelProfile').addEventListener('click', closeProfileModal);
             
-            // Закрытие модалки по клику вне
-            document.getElementById('profileModal').addEventListener('click', function(e) {
-                if (e.target === this) closeProfileModal();
+            document.getElementById('profileModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('profileModal')) closeProfileModal();
             });
             
-            // Контакты
             document.querySelectorAll('.contact').forEach(contact => {
-                contact.addEventListener('click', function() {
-                    const chatId = this.getAttribute('data-contact');
-                    switchToChat(chatId);
+                contact.addEventListener('click', () => {
+                    const chatId = contact.getAttribute('data-contact');
+                    if (!contact.classList.contains('banned')) {
+                        switchToChat(chatId);
+                    }
                 });
             });
             
-            // Поиск с debounce
             let searchTimeout;
-            document.getElementById('userSearch').addEventListener('input', function(e) {
+            document.getElementById('userSearch').addEventListener('input', (e) => {
                 clearTimeout(searchTimeout);
                 const query = e.target.value.trim();
                 searchTimeout = setTimeout(() => searchUser(query), 500);
             });
             
-            // Закрытие поиска при клике вне
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', (e) => {
                 if (!e.target.closest('.search-container')) {
                     document.getElementById('searchResults').style.display = 'none';
                 }
             });
             
+            setInterval(() => {
+                if (currentChat.id === 'putin' && !putinDeleted) {
+                    addChannelMessage('putin');
+                }
+                if (currentChat.id === 'gmd' && !gmdDeleted) {
+                    addChannelMessage('gmd');
+                }
+            }, 30000);
+            
+            setInterval(() => {
+                if (demoContacts[currentChat.id] && 
+                    !demoContacts[currentChat.id].isChannel && 
+                    Math.random() < 0.3) {
+                    addBotMessage(currentChat.id);
+                }
+            }, 15000);
+            
             console.log('✅ DOED Messenger ready');
         });
 
-        // Экспортируем функции глобально
         window.addUserToContacts = addUserToContacts;
         window.switchToChat = switchToChat;
+        window.logout = logout;
+        window.toggleSound = toggleSound;
+        window.addReaction = addReaction;
+        window.reportMessage = reportMessage;
+        window.cancelFile = cancelFile;
+        window.downloadFile = downloadFile;
     </script>
 </body>
 </html>

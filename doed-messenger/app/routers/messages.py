@@ -40,7 +40,6 @@ async def get_message_history(
     if not user:
         raise HTTPException(status_code=401, detail="Not authenticated")
     
-    # Получаем историю сообщений между пользователями
     messages = db.query(models.Message).filter(
         or_(
             (models.Message.sender_id == user.id) & (models.Message.receiver_id == contact_id),
@@ -57,7 +56,8 @@ async def get_message_history(
     result = []
     for msg in messages:
         sender = db.query(models.User).filter(models.User.id == msg.sender_id).first()
-        result.append({
+        
+        message_data = {
             "id": msg.id,
             "sender_id": msg.sender_id,
             "sender_name": sender.username if sender else "Unknown",
@@ -65,7 +65,19 @@ async def get_message_history(
             "timestamp": msg.timestamp.isoformat(),
             "is_read": msg.is_read,
             "is_mine": msg.sender_id == user.id
-        })
+        }
+        
+        # Добавляем информацию о файле если есть
+        if msg.is_file:
+            message_data.update({
+                "is_file": True,
+                "file_name": msg.file_name,
+                "file_path": msg.file_path,
+                "file_size": msg.file_size,
+                "file_type": msg.file_type
+            })
+        
+        result.append(message_data)
     
     return result
 
@@ -79,7 +91,6 @@ async def get_unread_messages(
     if not user:
         raise HTTPException(status_code=401, detail="Not authenticated")
     
-    # Группируем непрочитанные сообщения по отправителям
     unread = db.query(
         models.Message.sender_id,
         models.User.username,
